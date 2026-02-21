@@ -29,6 +29,25 @@
 **1. Architecture Overview**
 
 The platform will be built as a Single Page Application (SPA) that interacts with an async job-based backend. When a user uploads a video, the backend creates a processing job and returns a jobId. The frontend will track job progress via controlled polling (every 5 seconds) and render results (Summary.md, highlights, assets) once processing completes. Markdown output will be safely rendered using a sanitized markdown renderer.
+### Routing Structure
+
+- /upload → Upload screen
+- /jobs → Jobs list
+- /jobs/:id → Job detail
+- /jobs/:id/results → Results screen
+
+Route-level code splitting will be used to reduce bundle size.
+Protected routes will require authentication.
+
+### Reusable Component Patterns
+
+- StatusBadge component (used across all modules)
+- ProgressBar component
+- DataTable component (Jobs, Post history, Bulk reports)
+- ErrorBanner component
+- ConfirmModal component
+
+This ensures consistent UX and reduces duplication.
 
 **2. Screens & UI Structure**
 **2.1 Upload Screen**
