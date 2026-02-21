@@ -26,7 +26,7 @@
 
 **Your Solution for problem 1:**
 
-1. Architecture Overview
+**1. Architecture Overview**
 
 The platform will be built as a Single Page Application (SPA) that interacts with an async job-based backend. When a user uploads a video, the backend creates a processing job and returns a jobId. The frontend will track job progress via controlled polling (every 5 seconds) and render results (Summary.md, highlights, assets) once processing completes. Markdown output will be safely rendered using a sanitized markdown renderer.
 
