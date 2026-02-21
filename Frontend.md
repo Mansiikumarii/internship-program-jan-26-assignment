@@ -37,27 +37,19 @@ Purpose: Allow user to upload a video and initiate processing.
 
 **Components:**
 
-Drag & drop upload area
-
-File picker button
-
-File size validation (e.g., max 500MB)
-
-File type validation (mp4, mov, mkv)
-
-Upload progress bar
-
-Start Processing button
-
-Inline validation errors
+* Drag & drop upload area
+* File picker button
+* File size validation (e.g., max 500MB)
+* File type validation (mp4, mov, mkv)
+* Upload progress bar
+* Start Processing button
+* Inline validation errors
 
 **UX Behavior:**
 
-Disable Start button until file passes validation
-
-Show upload percentage + speed
-
-Show clear error messages for network or validation failures
+* Disable Start button until file passes validation
+* Show upload percentage + speed
+* Show clear error messages for network or validation failures
 
 **2.2 Jobs List Screen**
 
@@ -65,55 +57,40 @@ Purpose: Display all video processing jobs.
 
 **Components:**
 
-Table with:
+* Table with:
+ * Job ID
+ * File name
+ * Status badge (Queued / Processing / Completed / Failed)
+ * Created time
+ * Last updated time
+ * Action (View / Retry)
 
-Job ID
-
-File name
-
-Status badge (Queued / Processing / Completed / Failed)
-
-Created time
-
-Last updated time
-
-Action (View / Retry)
-
-Auto refresh indicator
-
-Manual refresh button
+* Auto refresh indicator
+* Manual refresh button
 
 **UX Behavior:**
 
-Color-coded status badges
-
-Failed jobs show Retry button
-
-Clicking row navigates to Job Detail screen
+* Color-coded status badges
+* Failed jobs show Retry button
+* Clicking row navigates to Job Detail screen
 
 **2.3 Job Detail Screen**
 
-Purpose: Show live progress of selected job.
+**Purpose:** Show live progress of selected job.
 
 **Components:**
 
-Status badge
-
-Progress bar (0–100%)
-
-Logs panel (scrollable)
-
-Cancel button (if allowed)
-
-Partial output preview section
+* Status badge
+* Progress bar (0–100%)
+* Logs panel (scrollable)
+* Cancel button (if allowed)
+* Partial output preview section
 
 **UX Behavior:**
 
-Polling indicator visible
-
-Logs auto-scroll toggle
-
-If partial output available, display preview while still processing
+* Polling indicator visible
+* Logs auto-scroll toggle
+* If partial output available, display preview while still processing
 
 **2.4 Results Screen**
 
@@ -121,108 +98,78 @@ If partial output available, display preview while still processing
 
 **Components:**
 
-Rendered Markdown (Summary.md)
-
-Highlights list (clickable timestamps)
-
-Asset preview (thumbnails)
-
-Download buttons
-
-“Download All” option
+* Rendered Markdown (Summary.md)
+* Highlights list (clickable timestamps)
+* Asset preview (thumbnails)
+* Download buttons
+* “Download All” option
 
 **UX Behavior:**
 
-Timestamp click seeks video
-
-Lazy load asset previews
-
-Use signed URLs for secure downloads
+* Timestamp click seeks video
+* Lazy load asset previews
+* Use signed URLs for secure downloads
 
 **3. UI States**
 
 The system supports the following UI states:
 
-**Idle**: No upload started. Upload area visible.
-
-**Uploading**: Progress bar active, controls disabled.
-
-**Queued**: Job created, waiting for backend processing.
-
-**Processing**: Progress updating, logs visible.
-
-**Partial Output**: Some results visible while remaining processing continues.
-
-**Success**: Full results rendered. Polling stops.
-
-**Failed**: Error message shown. Retry option available.
-
-**Retrying:** Previous state cleared, polling restarts.
+* **Idle**: No upload started. Upload area visible.
+* **Uploading**: Progress bar active, controls disabled.
+* **Queued**: Job created, waiting for backend processing.
+* **Processing**: Progress updating, logs visible.
+* **Partial Output**: Some results visible while remaining processing continues.
+* **Success**: Full results rendered. Polling stops.
+* **Failed**: Error message shown. Retry option available.
+* **Retrying:** Previous state cleared, polling restarts.
 
 **4. API Calling Strategy**
 **Upload Flow**
 
-POST /upload → returns jobId
-
-Redirect to /jobs/:id
+* _POST /upload_ → returns jobId
+* Redirect to_ /jobs/:id_
 
 **Job Tracking**
 
-GET /jobs
-
-GET /job/:id
+* _GET /jobs_
+* GET /job/:id
 
 **Polling Strategy**
 
-Poll every 5 seconds
-
-Stop polling when status = success or failed
-
-Use AbortController to cancel polling when navigating away
+* Poll every 5 seconds
+* Stop polling when status = success or failed
+* Use AbortController to cancel polling when navigating away
 
 **Retry Strategy**
 
-Automatic retry for network errors (max 3 attempts)
-
-Exponential backoff (2s → 4s → 8s)
-
-Do not retry for validation (4xx) errors
+* Automatic retry for network errors (max 3 attempts)
+* Exponential backoff (2s → 4s → 8s)
+* Do not retry for validation (4xx) errors
 
 **Auth Handling**
 
-On 401 → clear session → redirect to login
+* On 401 → clear session → redirect to login
 
 **5. Browser Caching Strategy**
 
-Cache _GET /jobs_ for 30 seconds (memory cache)
-
-Do not cache processing jobs
-
-Cache completed job results in IndexedDB
-
-Invalidate cache if job retried
-
-Refetch job detail on window focus
+* Cache _GET /jobs_ for 30 seconds (memory cache)
+* Do not cache processing jobs
+* Cache completed job results in IndexedDB
+* Invalidate cache if job retried
+* Refetch job detail on window focus
 
 **6. Debugging & Observability**
 
 If job appears stuck in “processing”:
 
-Inspect polling requests in Network tab
-
-Verify status updates in response
-
-Display backend correlation ID in UI
-
-Log frontend timestamps of last poll
-
-Provide “Report Issue” button including:
-
-jobId
-
-correlationId
-
-last API response
+* Inspect polling requests in Network tab
+* Verify status updates in response
+* Display backend correlation ID in UI
+* Log frontend timestamps of last poll
+* Provide “Report Issue” button including:
+ * jobId
+ * correlationId
+ * last API response
 
 ---
 
